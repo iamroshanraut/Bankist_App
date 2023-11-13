@@ -99,3 +99,11 @@ const createUserNames = function (accs) {   // Created a Function.
 createUserNames(accounts);
 console.log(accounts);
 
+// Calculating all amount and adding to total display amount
+
+const calcDisplayAmount = function (movements){
+  const balance = movements.reduce((acc , mov) =>acc + mov);
+  labelBalance.textContent = `${balance} €`;
+};
+
+calcDisplayAmount(account1.movements);
