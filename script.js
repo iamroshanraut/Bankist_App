@@ -67,19 +67,35 @@ const displayMovement = function (movement) {
   containerMovements.innerHTML = '';
 
   movement.forEach(function (amt, ind) {
-
-    const type = amt > 0 ? 'deposit' : 'withdrawal'; 
+    const type = amt > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
     <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${ind + 1} ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      ind + 1
+    } ${type}</div>
           <div class="movements__value">${amt}€</div>
     </div>
     `;
 
-    containerMovements.insertAdjacentHTML('afterbegin' , html);
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
-
 };
 
 displayMovement(account1.movements);
+
+// Computing UserName
+
+const createUserNames = function (accs) {   // Created a Function.
+  accs.forEach(function(acc){               // Using forEach to Access all the account.
+    acc.username = acc.owner                // Adding a new propety to accounts object after converting it.
+    .toLowerCase()                          // first converting it to lowerCase
+    .split(' ')                             // second spliting it from space
+    .map(name => name[0])                   // using map() to access first letter of each word
+    .join('');                              // joining all letters together
+  })
+};
+
+createUserNames(accounts);
+console.log(accounts);
+
