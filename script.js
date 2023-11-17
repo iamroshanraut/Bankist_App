@@ -84,26 +84,47 @@ const displayMovement = function (movement) {
 
 displayMovement(account1.movements);
 
-// Computing UserName
-
-const createUserNames = function (accs) {   // Created a Function.
-  accs.forEach(function(acc){               // Using forEach to Access all the account.
-    acc.username = acc.owner                // Adding a new propety to accounts object after converting it.
-    .toLowerCase()                          // first converting it to lowerCase
-    .split(' ')                             // second spliting it from space
-    .map(name => name[0])                   // using map() to access first letter of each word
-    .join('');                              // joining all letters together
-  })
-};
-
-createUserNames(accounts);
-console.log(accounts);
-
 // Calculating all amount and adding to total display amount
 
-const calcDisplayAmount = function (movements){
-  const balance = movements.reduce((acc , mov) =>acc + mov);
+const calcDisplayAmount = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov);
   labelBalance.textContent = `${balance} €`;
 };
 
 calcDisplayAmount(account1.movements);
+
+// Adding all in & out
+
+const calcDisplaySummary = function (adds) {
+  const movIn = adds.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${movIn}€`;
+
+  const movOut = adds.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(movOut)}€`;
+
+  const interest = adds
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(int => int >= 1)
+    .reduce((acc, int) => acc + int , 0);
+  labelSumInterest.textContent = `${interest}€`;  
+};
+
+calcDisplaySummary(account1.movements);
+
+// Computing UserName
+
+const createUserNames = function (accs) {
+  // Created a Function.
+  accs.forEach(function (acc) {
+    // Using forEach to Access all the account.
+    acc.username = acc.owner // Adding a new propety to accounts object after converting it.
+      .toLowerCase() // first converting it to lowerCase
+      .split(' ') // second spliting it from space
+      .map(name => name[0]) // using map() to access first letter of each word
+      .join(''); // joining all letters together
+  });
+};
+
+createUserNames(accounts);
+console.log(accounts);
