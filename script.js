@@ -82,8 +82,6 @@ const displayMovement = function (movement) {
   });
 };
 
-displayMovement(account1.movements);
-
 // Calculating all amount and adding to total display amount
 
 const calcDisplayAmount = function (movements) {
@@ -91,26 +89,26 @@ const calcDisplayAmount = function (movements) {
   labelBalance.textContent = `${balance} €`;
 };
 
-calcDisplayAmount(account1.movements);
-
 // Adding all in & out
 
-const calcDisplaySummary = function (adds) {
-  const movIn = adds.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+const calcDisplaySummary = function (acc) {
+  const movIn = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${movIn}€`;
 
-  const movOut = adds.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  const movOut = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(movOut)}€`;
 
-  const interest = adds
+  const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * 1.2) / 100)
     .filter(int => int >= 1)
-    .reduce((acc, int) => acc + int , 0);
-  labelSumInterest.textContent = `${interest}€`;  
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
 };
-
-calcDisplaySummary(account1.movements);
 
 // Computing UserName
 
@@ -127,4 +125,36 @@ const createUserNames = function (accs) {
 };
 
 createUserNames(accounts);
-console.log(accounts);
+
+// Implementing Login
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // Prevent form from Submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI Message
+    labelWelcome.textContent = `Welcome Back ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    console.log(currentAccount.pin);
+  }
+
+  containerApp.style.opacity = 100;
+
+  // Clearning Input Feild After Login
+  inputLoginUsername.value = inputLoginPin.value = ' ';
+
+  // Display Movement
+  displayMovement(currentAccount.movements);
+  // Display Balance
+  calcDisplayAmount(currentAccount.movements);
+  // Display Summary
+  calcDisplaySummary(currentAccount);
+});
