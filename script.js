@@ -84,9 +84,9 @@ const displayMovement = function (movement) {
 
 // Calculating all amount and adding to total display amount
 
-const calcDisplayAmount = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov);
-  labelBalance.textContent = `${balance} €`;
+const calcDisplayAmount = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov);
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 // Adding all in & out
@@ -129,11 +129,11 @@ createUserNames(accounts);
 //
 const updateUI = function(acc){
   // Display Movement
-  displayMovement(currentAccount.movements);
+  displayMovement(acc.movements);
   // Display Balance
-  calcDisplayAmount(currentAccount.movements);
+  calcDisplayAmount(acc);
   // Display Summary
-  calcDisplaySummary(currentAccount);
+  calcDisplaySummary(acc);
 };
 
 // Implementing Login
