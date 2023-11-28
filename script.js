@@ -126,6 +126,16 @@ const createUserNames = function (accs) {
 
 createUserNames(accounts);
 
+//
+const updateUI = function(acc){
+  // Display Movement
+  displayMovement(currentAccount.movements);
+  // Display Balance
+  calcDisplayAmount(currentAccount.movements);
+  // Display Summary
+  calcDisplaySummary(currentAccount);
+};
+
 // Implementing Login
 
 let currentAccount;
@@ -151,10 +161,26 @@ btnLogin.addEventListener('click', function (e) {
   // Clearning Input Feild After Login
   inputLoginUsername.value = inputLoginPin.value = ' ';
 
-  // Display Movement
-  displayMovement(currentAccount.movements);
-  // Display Balance
-  calcDisplayAmount(currentAccount.movements);
-  // Display Summary
-  calcDisplaySummary(currentAccount);
+  updateUI(currentAccount)
+  
 });
+
+// implementing transfer
+
+btnTransfer.addEventListener('click' , function(e){
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferAmount.value = '';
+
+  if(
+    amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username
+  ){
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    updateUI(currentAccount)
+  }
+})
